@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Captioning</title>
+    <link rel="shortcut icon" href="#">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/compressorjs/1.0.7/compressor.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+    <style>
+        .deepblue {
+            background: #1e2480;
+        }
+
+        .white-text {
+            color: #fff;
+        }
+
+        .header {
+            padding: 0;
+            margin: 0;
+            height: 60px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            height: 60px;
+            width: 60px;
+            float: left;
+            margin-left: 40px;
+        }
+
+        .logo-text {
+            float: left;
+            line-height: 60px;
+            padding-left: 11px;
+            font-weight: 400;
+            font-size: 18px;
+        }
+
+        .title {
+            line-height: 60px;
+            font-size: 25px;
+        }
+
+        .box {
+            height: 600px;
+            width: 80%;
+            margin: 20px auto;
+            text-align: center;
+        } 
+
+        .box>div {
+            height: 600px;
+            width: 50%;
+            float: left;
+        }
+
+        .image-placeholder {
+            height: 400px;
+            width: 100%;
+            background-color: #ececec;
+            margin: 15px 0;
+        }
+
+        .adaptive-image {
+            display: inline-block;
+            height: 400px;
+            max-height: 400px;
+            width: auto;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            <div class="header deepblue">
+                <a href="https://www.oneflow.cloud/" target="_blank">
+                    <img class="logo" src="data:image/png;base64,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">
+                    <span class="logo-text white-text">智能云</span>
+                </a>
+                <span class="title white-text">Image Captioning (图像内容生成) 在线Demo</span>
+            </div>
+            <div class="box">
+                <div style="text-align: center;">
+                    <h4>点击上传输入的图像:</h4>
+                        <div class="text-center">
+                            <input id="file_input" v-on:change="get_file_path" class="file" type="file" multiple
+                                data-min-file-count="1" style="display: block;">
+                            <img id="input_image" class="image-placeholder">
+                        </div>
+                        <button type="submit" class="btn btn-primary" @click="execute()">确认</button>
+                </div>
+                <div>
+                    <h4>输出结果:</h4>
+                    <p id="caption">......</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script type="module">
+        // 在 #app 标签下渲染一个按钮组件
+        new Vue({
+            el: '#app',
+            data: {
+                file_path: " ",
+                image_url: " ",
+            },
+            methods: {
+                get_file_path: function (e) {
+                    this.file_path = e.target.value;
+                    document.getElementById("input_image").src = window.URL.createObjectURL(document.getElementById("file_input").files[0]);
+                    document.getElementById("input_image").className = 'adaptive-image';
+                },
+
+                execute: function () {
+                    let x = document.getElementById("file_input").files[0];
+                    let params = new FormData();
+
+                    params.append('image', x, x.name);
+                    let config = {
+                        headers: {'Content-Type': 'multipart/form-data'}
+                    };
+
+                    axios.post("{{base_dir}}/v1/index", params, config).then((res) => {
+                        if (res.data.success) {
+                            document.getElementById("caption").innerText = res.data.info;
+                        }
+                        else {
+                            alert(res.data.info);
+                        }
+                    });
+                },
+            },
+        });
+    </script>
+</body>
+
+</html>
