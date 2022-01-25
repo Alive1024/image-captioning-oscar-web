@@ -12,7 +12,7 @@ from pytorch_transformers.modeling_bert import (BertEmbeddings,
         BertPooler, BertLayerNorm, BertPreTrainedModel,
 		BertOnlyMLMHead)
 from .modeling_utils import CaptionPreTrainedModel
-from ..utils.cbs import ConstrainedBeamSearch, select_best_beam_with_constraints
+from oscar.utils.cbs import ConstrainedBeamSearch, select_best_beam_with_constraints
 
 logger = logging.getLogger(__name__)
 

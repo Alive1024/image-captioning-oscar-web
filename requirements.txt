@@ -1,0 +1,5 @@
+pytorch-transformers==1.0.0
+anytree==2.8.0
+fvcore==0.1.5.post20211023
+pycocotools==2.0.3
+flask==2.0.2
