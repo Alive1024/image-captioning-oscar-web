@@ -87,11 +87,14 @@ def server_error(error_info):
 
 
 class ListHandler(logging.Handler):
-    def __init__(self, log_list, **kwargs) -> None:
+    def __init__(self, log_list, max_capacity=600, **kwargs) -> None:
         super().__init__(**kwargs)
         self.log_list = log_list
+        self.max_capacity = max_capacity
     
     def emit(self, record) -> None:
+        if len(self.log_list) > self.max_capacity:
+            self.log_list = []
         self.log_list.append(self.format(record))
 
 
