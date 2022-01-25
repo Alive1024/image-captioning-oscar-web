@@ -69,3 +69,13 @@ Image Captioning (图像描述生成) 的独立 Web部署端。输入一张图�
 </div>
 
 **提示**：开始运行后的初始片刻，需要一定时间执行 `launch.sh` 以初始化运行环境，此时访问链接将会返回 "502 Bad Gateway"，稍等片刻即可。
+
+
+## 其他
+除了通过Web端进行在线推理，也可以通过命令行直接调用 `infer_on_single.py` 完成在图像上的推理，用法如下：
+
+在项目根目录下执行：
+```
+python oscar/infer_on_single.py --image_path <图像文件的路径> --eval_model_dir <使用的模型权重所在目录>
+```
+
